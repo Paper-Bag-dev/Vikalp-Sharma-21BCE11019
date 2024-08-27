@@ -6,7 +6,7 @@
 3. Built using typescript.
 
   
-
+### Steps to launch game:
 1. Download this repository
 2. Open one terminal to run server and one to run client
 3. Run Command npm run dev on client and npm run dev on server
