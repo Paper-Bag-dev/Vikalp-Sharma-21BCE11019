@@ -65,15 +65,19 @@ io.on("connection", (socket) => {
     // make_move
     socket.on("make_move", (_a) => __awaiter(void 0, [_a], void 0, function* ({ playerType, roomID, move }) {
         console.log("Move made:", move);
+        console.log("Room ID", roomID);
         const result = yield GameManager_1.GameManager.makeMove(playerType, roomID, move);
         if (result.success) {
-            socket.to(roomID).emit("move_made", {
+            io.to(roomID).emit("moveMade", {
                 gameBoard: result.newBoard,
                 moveCount: result.moveCount,
             });
         }
+        else if (!result.success && result.message === "invalid Move") {
+            socket.emit("invalidMove", { message: "Invalid move! Please try again." });
+        }
         else {
-            socket.emit("error", { message: result.error });
+            socket.emit("error", { message: result.message });
         }
     }));
     // leave game

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Square from './Square';
 import Move from './Move';
-
+import { Context } from '../context/context';
 
 const initialBoardState = () => {
     const gridSize = 5;
@@ -25,24 +25,44 @@ const initialBoardState = () => {
 };
 
 const Board = ({ socket, roomId, roomBoard, moveCount, user }) => {
-    const [board, setBoard] = useState(roomBoard || initialBoardState());
+    const { loading, setLoading } = useContext(Context);
+    const [board, setBoard] = useState(initialBoardState());
     const [validMoves, setValidMoves] = useState([]);
     const [selectedPiece, setSelectedPiece] = useState("");
     const [selectedPosition, setSelectedPosition] = useState(null);
+    const [dummy, setDummy] = useState(false);
 
     useEffect(() => {
-        // Listen for move_made event to update the board
-        console.log("socket");
-        console.log(socket);
-        socket.on("move_made", ({ gameBoard, moveCount }) => {
-            setBoard(gameBoard);
-            console.log("Board updated:", gameBoard);
-        });
+        try {
+            if (roomBoard) {
+                setBoard(roomBoard);
+            }
+            socket.on("moveMade", ({ gameBoard }) => {
+                if (gameBoard) {
+                    setBoard(gameBoard);
+                    console.log("Board updated:", gameBoard);
+                    window.location.reload();
+                }
+            });
 
-        return () => {
-            socket.off("move_made");
-        };
-    }, []);
+            // Set loading state based on user and moveCount
+            if (user === "A") {
+                setLoading(moveCount % 2 !== 0);
+            } else if (user === "B") {
+                setLoading(moveCount % 2 === 0);
+            }
+
+            return () => {
+                socket.off("moveMade");
+            };
+        } catch (error) {
+            console.error("Error in useEffect:", error);
+        }
+    }, [socket, roomBoard, moveCount, user]);
+
+    useEffect(() => {
+        console.log("Loading state updated:", loading);
+    }, [loading]);    
 
     const moves = ["L", "R", "F", "B"];
     const hero2 = ["FL", "FR", "BL", "BR"];
@@ -63,18 +83,20 @@ const Board = ({ socket, roomId, roomBoard, moveCount, user }) => {
 
     const handleMove = (move) => {
         if (!selectedPiece || !selectedPosition) return;
-    
-        // Emit move to the server without the socket object
+        const [pieceInfo, position] = board[selectedPosition[0]][selectedPosition[1]].split(":");
+        const [player, piece] = pieceInfo.split("-");
+
+        // MOVEMENT Command
         socket.emit("make_move", {
             playerType: user,
             roomID: roomId,
-            move: `${board[selectedPosition[0]][selectedPosition[1]]}:${move}`
+            move: `${piece}:${move}`
         });
-    
+        
         setSelectedPiece("");
         setValidMoves([]);
+        window.location.reload();
     };
-    
 
     const handleSquareClick = (square, [rowIndex, colIndex]) => {
         if ((user === "A" && moveCount % 2 === 0) || (user === "B" && moveCount % 2 !== 0)) {
@@ -83,26 +105,31 @@ const Board = ({ socket, roomId, roomBoard, moveCount, user }) => {
     };
 
     return (
-        <div className="flex-col">
+        <div className='flex flex-col justify-center'>
+            {loading && <div className="absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
+                <p className="text-2xl text-white">Opponent's turn...</p>
+            </div>}
             <div className="flex-col">
-                {board.map((row, rowIndex) => (
-                    <div key={rowIndex} className="flex">
-                        {row.map((square, colIndex) => (
-                            <Square
-                                key={colIndex}
-                                piece={square}
-                                isSelected={selectedPosition && selectedPosition[0] === rowIndex && selectedPosition[1] === colIndex}
-                                onClick={() => handleSquareClick(square, [rowIndex, colIndex])}
-                            />
-                        ))}
-                    </div>
-                ))}
-            </div>
-            <span className="text-lg">Selected: {selectedPiece}</span>
-            <div className="flex justify-center my-4">
-                {validMoves.map((move, index) => (
-                    <Move key={index} piece={move} onClick={() => handleMove(move)} />
-                ))}
+                <div className="flex-col">
+                    {board.map((row, rowIndex) => (
+                        <div key={rowIndex} className="flex">
+                            {row.map((square, colIndex) => (
+                                <Square
+                                    key={colIndex}
+                                    piece={square}
+                                    isSelected={selectedPosition && selectedPosition[0] === rowIndex && selectedPosition[1] === colIndex}
+                                    onClick={() => handleSquareClick(square, [rowIndex, colIndex])}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
+                <span className="text-lg">Selected: {selectedPiece}</span>
+                <div className="flex justify-center my-4">
+                    {validMoves.map((move, index) => (
+                        <Move key={index} piece={move} onClick={() => handleMove(move)} />
+                    ))}
+                </div>
             </div>
         </div>
     );

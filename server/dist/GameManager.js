@@ -42,6 +42,8 @@ class GameManager {
                         opponentID: existingRoom.player1 === socket.id
                             ? existingRoom.player2
                             : existingRoom.player1,
+                        gameBoard: existingRoom.gameBoard,
+                        moveCount: existingRoom.moveCount,
                     });
                     console.log(`User ${socket.id} rejoined room ${existingRoomID}`);
                     return;
@@ -71,12 +73,21 @@ class GameManager {
                 GameManager.player2 = socket.id;
                 GameManager.pendingUser.join(roomName);
                 socket.join(roomName);
+                // Updating
+                const defaultBoard = [
+                    ["A-P1", "A-P2", "A-H1", "A-H2", "A-P3"],
+                    ["", "", "", "", ""],
+                    ["", "", "", "", ""],
+                    ["", "", "", "", ""],
+                    ["B-P1", "B-P2", "B-H1", "B-H2", "B-P3"],
+                ];
                 // Create a schema to keep track of the room
                 const room = yield Room_1.default.create({
                     status: "init",
                     roomId: roomName,
                     player1: GameManager.pendingUser.id,
                     player2: socket.id,
+                    gameBoard: defaultBoard,
                     moveCount: 0,
                 });
                 // Notify both users that they are matched and send the room information
@@ -132,15 +143,15 @@ class GameManager {
             if ((0, validate_1.validateMove)(move, board, playerType)) {
                 const newBoard = yield (0, applyMove_1.applyMove)(move, roomID, playerType);
                 if (newBoard) {
-                    yield Room_1.default.updateOne({ roomId: roomID }, { $set: { gameBoard: newBoard } });
-                    return { success: true, newBoard, moveCount: room.moveCount };
+                    yield Room_1.default.updateOne({ roomId: roomID }, { $set: { gameBoard: newBoard, moveCount: room.moveCount + 1 } });
+                    return { success: true, newBoard, moveCount: room.moveCount + 1 };
                 }
                 else {
-                    return { success: false, error: "Failed to apply move" };
+                    return { success: false, message: "Failed to apply move" };
                 }
             }
             else {
-                return { success: false, error: "Invalid move" };
+                return { success: false, message: "invalid Move" };
             }
         });
     }

@@ -6,7 +6,8 @@ export function validateMove(
     const [character, direction] = move.split(':');
 
     const isInBounds = (r: number, c: number) => r >= 0 && r < 5 && c >= 0 && c < 5;
-    
+    console.log("currentPlayer in validate" + currentPlayer);
+
     // Reverse the direction if the currentPlayer is "A"
     const adjustDirection = (dir: string) => {
         if (currentPlayer === "A") {
@@ -26,6 +27,7 @@ export function validateMove(
     let piecePosition: [number, number] | null = null;
     for (let row = 0; row < 5; row++) {
         for (let col = 0; col < 5; col++) {
+            // console.log(board[row][col]);
             if (board[row][col] === `${currentPlayer}-${character}`) {
                 piecePosition = [row, col];
                 break;

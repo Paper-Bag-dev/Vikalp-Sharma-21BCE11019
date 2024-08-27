@@ -41,6 +41,8 @@ export class GameManager {
             existingRoom.player1 === socket.id
               ? existingRoom.player2
               : existingRoom.player1,
+          gameBoard: existingRoom.gameBoard,
+          moveCount: existingRoom.moveCount,
         });
         console.log(`User ${socket.id} rejoined room ${existingRoomID}`);
         return;
@@ -75,12 +77,22 @@ export class GameManager {
       GameManager.pendingUser.join(roomName);
       socket.join(roomName);
 
+      // Updating
+      const defaultBoard = [
+        ["A-P1", "A-P2", "A-H1", "A-H2", "A-P3"],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["", "", "", "", ""],
+        ["B-P1", "B-P2", "B-H1", "B-H2", "B-P3"],
+      ];
+
       // Create a schema to keep track of the room
       const room = await Room.create({
         status: "init",
         roomId: roomName,
         player1: GameManager.pendingUser.id,
         player2: socket.id,
+        gameBoard: defaultBoard,
         moveCount: 0,
       });
 
@@ -134,31 +146,30 @@ export class GameManager {
     playerType: string,
     roomID: string,
     move: string
-) {
+  ) {
     const room = await Room.findOne({ roomId: roomID });
 
     if (!room) {
-        return { success: false, error: "Room not found" };
+      return { success: false, error: "Room not found" };
     }
 
     room.status = "ongoing";
 
     const board: any = room.gameBoard;
     if (validateMove(move, board, playerType)) {
-        const newBoard = await applyMove(move, roomID, playerType);
+      const newBoard = await applyMove(move, roomID, playerType);
 
-        if (newBoard) {
-            await Room.updateOne(
-                { roomId: roomID },
-                { $set: { gameBoard: newBoard } }
-            );
-            return { success: true, newBoard, moveCount: room.moveCount };
-        } else {
-            return { success: false, error: "Failed to apply move" };
-        }
+      if (newBoard) {
+        await Room.updateOne(
+          { roomId: roomID },
+          { $set: { gameBoard: newBoard, moveCount: room.moveCount + 1 } }
+        );
+        return { success: true, newBoard, moveCount: room.moveCount + 1 };
+      } else {
+        return { success: false, message: "Failed to apply move" };
+      }
     } else {
-        return { success: false, error: "Invalid move" };
+      return { success: false, message: "invalid Move" };
     }
-    }
-
+  }
 }
