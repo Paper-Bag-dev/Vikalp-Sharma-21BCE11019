@@ -9,17 +9,14 @@
 ![image](https://github.com/user-attachments/assets/e697dcb5-2816-4f60-b764-0ea6891c5fcc)
 
 ### Main Features 📖 :
-✨ Uses Socket.io Websocket functionality.
 
-✨Game Persistance is added via cookie logic to allow game to persist even after the user closes the game, refresh's the game or leaves as long as the window exists or cookie is their in the browser the user can automatically rejoin.
+- ✨ Utilizes Socket.io for WebSocket functionality, enabling real-time communication.
+- ✨ Game persistence is achieved through cookie logic, allowing users to automatically rejoin the game even after closing or refreshing the window, as long as the cookie exists.
+- ✨ The game state auto-updates in real-time, reflecting all changes instantly.
+- ✨ All changes and game states are stored in a database for ease of access and consistency.
+- ✨ Built with TypeScript for robust type-checking and development efficiency.
+- ✨ The frontend is built using Vite and Tailwind CSS, ensuring a fast, responsive, and modern user interface.
 
-✨ Game Auto updates and changes state.
-
-✨ All Changes are stored in a database for ease of access and use.
-
-✨ Built using typescript.
-
-✨ Frontend is built using Vite and Tailwind to be fast and responsive. 
 ![image](https://github.com/user-attachments/assets/3246bee6-6b60-42cf-9476-52b0555ae224)
 
   
