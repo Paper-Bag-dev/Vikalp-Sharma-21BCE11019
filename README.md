@@ -23,12 +23,13 @@
 ### 👣 Steps to launch game 👣:
 1. Download/Clone this repository
 2. Open one terminal to run server and one to run client
-3. Run Command npm run dev on client and npm run dev on server
-4. Join game with one browser window
-5. Use another browser window(either in incognito mode or seperate browser) to join another game
-6. Play game
-7. Test Out Components.
-8. Finish.
+3. Run command npm i on both client and server side terminals.
+4. Run Command npm run dev on both client and server terminals.
+5. Join game with one browser window
+6. Use another browser window(either in incognito mode or seperate browser) to join another game
+7. Play game
+8. Test Out Components.
+9. Finish.
 
 ### Known bugs:
 1. Invalid movement logic may misbehave.
