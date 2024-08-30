@@ -6,7 +6,7 @@
 1. To be as close to the demands and needs required.
 2. To be persitant and responsive to user's demand.
 
-## Architecture schema:
+## Architecture / Schema:
 ![image](https://github.com/user-attachments/assets/e697dcb5-2816-4f60-b764-0ea6891c5fcc)
 
 ### Main Features 📖 :
