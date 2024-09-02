@@ -1,6 +1,7 @@
 # Vikalp-Sharma-21BCE11019
-
+<div style="display: flex; justify-content: center; align-items: center; width: 100%;">
 ## [Video Link](https://drive.google.com/file/d/1zTMBvKh26uX61UXx9gjPz8TVallIIbf4/preview)
+</div>
 
 <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
   <img src="https://github.com/user-attachments/assets/b63330a6-be94-43ed-90d6-2cbbb81c3832" alt="Image 1" style="width: 300px; margin: 0 10px;">
