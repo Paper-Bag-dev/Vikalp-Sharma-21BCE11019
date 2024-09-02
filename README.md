@@ -1,7 +1,11 @@
 # Vikalp-Sharma-21BCE11019
 
-![image](https://github.com/user-attachments/assets/b63330a6-be94-43ed-90d6-2cbbb81c3832)
-![image](https://github.com/user-attachments/assets/4a6d5159-b32d-4425-a8c4-d4901481c478)
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/b63330a6-be94-43ed-90d6-2cbbb81c3832" alt="Image 1" width="300"></td>
+    <td><img src="https://github.com/user-attachments/assets/4a6d5159-b32d-4425-a8c4-d4901481c478" alt="Image 2" width="300"></td>
+  </tr>
+</table>
 ### Aim of the game🎯:
 1. To be as close to the demands and needs required.
 2. To be persitant and responsive to user's demand.
