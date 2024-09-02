@@ -6,9 +6,6 @@
   <img src="https://github.com/user-attachments/assets/4a6d5159-b32d-4425-a8c4-d4901481c478" alt="Image 2" style="width: 300px; margin: 0 10px;">
 </div>
 
-### Aim of the game🎯:
-1. To be as close to the demands and needs required.
-2. To be persitant and responsive to user's demand.
 ## Architecture / Schema:
 ![image](https://github.com/user-attachments/assets/e697dcb5-2816-4f60-b764-0ea6891c5fcc)
 
